@@ -53,7 +53,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.hilt.navigation.compose)
 
+    implementation(libs.androidx.navigation.compose)
     kapt (libs.room.compiler)
     implementation (libs.room.ktx)
     implementation (libs.room.runtime)

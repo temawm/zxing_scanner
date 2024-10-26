@@ -20,31 +20,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.qr_scanner.navigation.AppNavGraph
 import com.example.qr_scanner.ui.theme.Qr_scannerTheme
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val qrScanLauncher = registerForActivityResult(ScanContract()) { result ->
-        if (result.contents == null){
+        if (result.contents == null) {
             Toast.makeText(this, "No scan data received!", Toast.LENGTH_SHORT).show()
-        }
-        else {
+        } else {
             Toast.makeText(this, "Scanned: ${result.contents}", Toast.LENGTH_SHORT).show()
         }
 
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            Qr_scannerTheme {
-                QRScreen()
-            }
-        }
-    }
-
     private fun QRScan() {
         val options = ScanOptions()
         options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
@@ -55,29 +46,18 @@ class MainActivity : ComponentActivity() {
         qrScanLauncher.launch(options)
     }
 
-    @Composable
-    private fun QRScreen() {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .border(1.dp, color = Color.Gray, RoundedCornerShape(16.dp)),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(
-                modifier = Modifier
-                    .wrapContentSize(),
-                onClick = {
-                    QRScan()
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Red,
-                    contentColor = Color.White
-                )
-            ) {
-                Text(text = "Сканировать QR-код")
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            Qr_scannerTheme {
+                AppNavGraph()
             }
         }
     }
 }
+
+
+
+
